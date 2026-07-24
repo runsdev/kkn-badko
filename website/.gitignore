@@ -1,0 +1,10 @@
+# env files — real credentials never enter the repo (BR-006)
+.env
+.env.local
+.env*.local
+
+# dependencies / build output (for the upcoming Next.js scaffold)
+node_modules/
+.next/
+out/
+*.tsbuildinfo
