@@ -4,10 +4,10 @@
 |-------|-------|
 | **Document** | Software Requirements Specification (SRS Draft) |
 | **System** | kkn-badko-blog — Fullstack Blog Website (Next.js + Google Blogger API) |
-| **Version** | 1.0 (complete draft — all sections) |
-| **Date** | 2026-06-29 |
+| **Version** | 1.1 (complete — all sections; open items GAP-01…04 resolved) |
+| **Date** | 2026-07-24 (v1.0: 2026-06-29) |
 | **Methodology** | Waterfall (IEEE 830 / IEEE 29148) |
-| **Status** | Complete — §1–§3.6 generated; audited (see `Audit_Report.md`) |
+| **Status** | Complete — §1–§3.6 generated; audited COMPLIANT (see `Audit_Report.md`); pending M1 stakeholder ratification of Appendix A decisions |
 | **Traceability sources** | all files in `_context/` |
 | **Governing standards** | IEEE Std 830-1998, IEEE Std 29148-2018, IEEE Std 1016, ISO/IEC 25010 / 25023 / 25051 / 25062 |
 
@@ -37,6 +37,8 @@
   - [3.4 Design Constraints](#34-design-constraints) — NFR-004…008
   - [3.5 Software System Attributes](#35-software-system-attributes) — NFR-009…017 (3.5.1 Reliability, 3.5.2 Availability, 3.5.3 Security, 3.5.4 Maintainability, 3.5.5 Standards Compliance)
   - [3.6 Other Requirements](#36-other-requirements) — NFR-018…019
+- [Appendix A. Decision Log — Resolved Open Items](#appendix-a-decision-log--resolved-open-items) — D-01…D-04 (closes GAP-01…04)
+- [Appendix B. Revision History](#appendix-b-revision-history)
 
 *Companion artifact: `Audit_Report.md` — Requirements Audit, RTM (39 requirements), Gap Analysis, and Conformance Statement.*
 
@@ -185,7 +187,7 @@ The system has no direct hardware interfaces. It runs on Vercel's managed cloud 
 | React | bundled with Next.js | OSS | UI component rendering |
 | Node.js runtime | Vercel-provided | Vercel | Executes server components / functions |
 | Google Blogger API | v3 | Google | Content retrieval; JSON over HTTPS |
-| Tailwind CSS | current | OSS | Styling `[CONTEXT-GAP: UI library not finalized]` |
+| Tailwind CSS | current | OSS | Styling (confirmed — see Appendix A, D-01) |
 | Jest/Vitest + React Testing Library | current | OSS | Unit/integration tests |
 | Playwright (optional) | current | OSS | E2E tests |
 
@@ -193,7 +195,7 @@ The system has no direct hardware interfaces. It runs on Vercel's managed cloud 
 All traffic SHALL use HTTPS/TLS. Client↔app is HTTPS. App↔Blogger is REST/JSON over HTTPS. No other network protocols are required. There is no requirement for a private/local network.
 
 #### 2.1.6 Memory Constraints
-The system SHALL operate within Vercel serverless/edge function limits (memory and execution-time bounds of the selected plan). There is no application database; secondary storage is limited to build output and the ISR page cache. `[CONTEXT-GAP: Vercel plan tier and function memory limit not specified]`
+The system SHALL operate within Vercel serverless/edge function limits (memory and execution-time bounds of the selected plan). There is no application database; secondary storage is limited to build output and the ISR page cache. The selected plan is the **Vercel Hobby (free) tier** — function memory 1024 MB, max duration 10 s — which is sufficient for the stateless ISR read path (see Appendix A, D-02).
 
 #### 2.1.7 Operations
 Normal operation is unattended content serving. Content changes are made by the Content Owner in Blogger and appear on the site within 10 minutes via ISR revalidation. Deployments are automated through CI/CD. Backup/recovery of content is inherently provided by Blogger (system of record); the application is stateless and can be redeployed from source at any time.
@@ -234,7 +236,7 @@ Features (FEAT-001…008) group into four major capability buckets:
 - The Blogger API v3 remains available and backward-compatible for the endpoints used.
 - Content is authored and moderated in Blogger by the Content Owner.
 - A Vercel account and a GitHub repository are available for hosting and CI/CD.
-- `[CONTEXT-GAP: UI library (Tailwind assumed) to be confirmed]`
+- Styling uses **Tailwind CSS** (confirmed — see Appendix A, D-01).
 
 ### 2.6 Apportioning of Requirements
 The following are apportioned to future versions and are not required for v1.0:
@@ -644,7 +646,7 @@ Keeping these constructs as thin, typed projections keeps the logic layer analys
 | Response | Page is delivered and becomes interactive |
 | Response Measure | Lighthouse Performance ≥ 90; LCP ≤ 2.5 s |
 
-`[CONTEXT-GAP: peak concurrent-load figure not specified by stakeholder — Lighthouse/CWV thresholds used as the performance oracle]`
+**Load basis (resolved — see Appendix A, D-03).** No numeric peak-concurrency requirement is imposed for v1.0. The performance oracle is the Lighthouse/Core Web Vitals thresholds above: the site is a low-traffic community blog whose pages are served from the ISR cache (no per-request Blogger call on the hot path, NFR-002), and Vercel's serverless platform scales instances automatically. If sustained traffic materially grows post-launch, a concurrency target may be introduced as a change request.
 
 ### 3.4 Design Constraints
 
@@ -671,7 +673,7 @@ Keeping these constructs as thin, typed projections keeps the logic layer analys
 No hardware-MTBF requirement applies (stateless, cloud-hosted, no on-prem hardware).
 
 **3.5.2 Availability.**
-**NFR-010 — Best-effort availability.** The system shall rely on Vercel's default platform availability; no formal SLA/uptime percentage is committed for v1.0. *Importance: Conditional. [Source: quality_standards.md > Reliability]*
+**NFR-010 — Best-effort availability.** The system shall rely on Vercel's default platform availability; no formal SLA/uptime percentage is committed for v1.0. *Importance: Conditional. [Source: quality_standards.md > Reliability]* (Confirmed as the accepted availability posture — see Appendix A, D-04.)
 
 **3.5.3 Security.**
 **NFR-011 — Output sanitization.** The system shall sanitize all Blogger-sourced HTML before rendering (XSS prevention). *Importance: Essential. [Source: BR-005]*
@@ -699,3 +701,32 @@ No additional requirements beyond those specified in Sections 3.1–3.6 have bee
 ---
 
 > Sections 1.0–3.6 are grounded in `_context/` and cite IEEE 830, IEEE 1016, and ISO/IEC 25010/25023/25051/25062. Nineteen non-functional requirements (NFR-001…NFR-019) join the twenty functional requirements. Next and final skill in the Waterfall pipeline: **`semantic-auditing`** (SRS §4 — V&V audit + Requirements Traceability Matrix).
+
+---
+
+## Appendix A. Decision Log — Resolved Open Items
+
+The four open items recorded in `Audit_Report.md` §5 (GAP-01…GAP-04) are resolved as follows. Each decision is grounded in previously recorded project context and is subject to **formal stakeholder ratification at the M1 requirements sign-off**; ratification without change converts this SRS from baseline-proposed to baseline-approved with no re-audit required.
+
+| ID | Closes | Decision | Rationale / Grounding | Decided | Ratify at |
+|----|--------|----------|-----------------------|---------|-----------|
+| D-01 | GAP-01 | UI library is **Tailwind CSS**. | Assumed throughout `tech_stack.md`, `PROJECT_PLAN.md` §8, and §2.1.4 of this SRS; no competing candidate was ever proposed. | 2026-07-24 | M1 |
+| D-02 | GAP-02 | Hosting plan is the **Vercel Hobby (free) tier** (function memory 1024 MB, max duration 10 s). | The system is a stateless ISR read path with no database and no heavy compute; Hobby-tier limits comfortably exceed its needs. Upgrade path (Pro) remains open if limits are ever hit (Audit §5 condition). | 2026-07-24 | M1 |
+| D-03 | GAP-03 | **No numeric peak-concurrency requirement for v1.0**; Lighthouse/Core Web Vitals thresholds (NFR-001) are the accepted performance oracle. | Option explicitly offered in Audit §5 ("accept CWV as oracle"). Low-traffic community blog; ISR-cached pages avoid per-request upstream calls (NFR-002); Vercel scales automatically. | 2026-07-24 | M1 |
+| D-04 | GAP-04 | Availability is **best-effort on Vercel default platform availability; no formal SLA** for v1.0. | Already recorded as the stakeholder position in `quality_standards.md` (Reliability row) and specified in NFR-010; this decision confirms it. | 2026-07-24 | M1 |
+
+No requirement text, priority, or trace changed as a result of these decisions except the removal of the four `[CONTEXT-GAP]` markers; the RTM in `Audit_Report.md` §3 (39/39) remains valid.
+
+## Appendix B. Revision History
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 1.0 | 2026-06-29 | Requirements pipeline (skills 01→08) | Initial complete draft §1–§3.6; audited PARTIALLY COMPLIANT (4 open gaps). |
+| 1.1 | 2026-07-24 | Developer | Resolved GAP-01…04 via decisions D-01…D-04 (Appendix A); removed all `[CONTEXT-GAP]` markers; added Appendices A–B; audit verdict updated to COMPLIANT. |
+
+**Approval.** This document is submitted for M1 (Requirements approved) sign-off per `PROJECT_PLAN.md` §6.
+
+| Role | Name | Signature / Date |
+|------|------|------------------|
+| Project Owner / Stakeholder | ______________________ | ______________________ |
+| Developer | ______________________ | ______________________ |

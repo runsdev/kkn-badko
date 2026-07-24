@@ -5,7 +5,9 @@
 # split per-section files. The canonical artifact is SRS_Draft.md; the section
 # order within it is listed below for reference and for any future split/build.
 
-SRS_Draft.md   # canonical, assembled document
+SRS_Draft.md   # canonical, assembled document — v1.1 (2026-07-24): GAP-01..04 resolved,
+               # Appendix A (decision log D-01..D-04) + Appendix B (revision history) added,
+               # audit verdict COMPLIANT. export/*.docx regenerated from v1.1 (pandoc).
 
 # Section order within SRS_Draft.md:
 #   1. Introduction                         (context-engineering)      [DONE]
