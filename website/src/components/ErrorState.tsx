@@ -5,9 +5,12 @@ export default function ErrorState({ retryHref = "/" }: { retryHref?: string }) 
   return (
     <div className="py-16 text-center">
       <h1 className="text-lg font-semibold">Something went wrong</h1>
-      <p className="mt-2 opacity-80">We couldn&rsquo;t load posts. Please try again shortly.</p>
-      <p className="mt-4">
-        <a href={retryHref} className="underline">
+      <p className="mt-2 text-muted">We couldn&rsquo;t load posts. Please try again shortly.</p>
+      <p className="mt-5">
+        <a
+          href={retryHref}
+          className="text-accent underline underline-offset-4 hover:text-accent-hover"
+        >
           Retry
         </a>
       </p>

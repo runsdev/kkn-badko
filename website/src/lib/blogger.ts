@@ -143,6 +143,29 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   return null;
 }
 
+// Sitemap support (NFR-015): every post's slug + last update, one walk.
+export async function listAllPosts(): Promise<{ slug: string; updated: string }[]> {
+  const all: { slug: string; updated: string }[] = [];
+  let pageToken: string | undefined;
+  for (let hop = 0; hop < MAX_PAGE_WALK; hop++) {
+    const data = await bloggerFetch<{
+      nextPageToken?: string;
+      items?: { url: string; updated?: string; published: string }[];
+    }>("/posts", {
+      maxResults: "50",
+      fetchBodies: "false",
+      fields: "nextPageToken,items(url,updated,published)",
+      ...(pageToken ? { pageToken } : {}),
+    });
+    for (const p of data.items ?? []) {
+      all.push({ slug: slugFromPostUrl(p.url), updated: p.updated ?? p.published });
+    }
+    if (!data.nextPageToken) break;
+    pageToken = data.nextPageToken;
+  }
+  return all;
+}
+
 // FR-011/012 — label value is URL-encoded by URLSearchParams (P-5)
 export async function getPostsByLabel(label: string): Promise<PostSummary[]> {
   const data = await bloggerFetch<RawPostList>("/posts", {

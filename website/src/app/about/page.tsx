@@ -4,7 +4,7 @@ import ErrorState from "@/components/ErrorState";
 import { getAboutPage } from "@/lib/blogger";
 import type { StaticPage } from "@/lib/types";
 
-export const metadata: Metadata = { title: "About" };
+export const metadata: Metadata = { title: "About", alternates: { canonical: "/about" } };
 
 // WF-05: About content from Blogger static pages (FEAT-007 / FR-018).
 export default async function AboutPage() {
@@ -18,9 +18,12 @@ export default async function AboutPage() {
 
   return (
     <article>
-      <h1 className="text-2xl font-bold">{page.title}</h1>
+      <h1 className="text-2xl font-bold sm:text-3xl">{page.title}</h1>
       {/* sanitized in the service layer — FR-018/FR-008 */}
-      <div className="post-content mt-6" dangerouslySetInnerHTML={{ __html: page.contentHtml }} />
+      <div
+        className="prose prose-neutral mt-8 max-w-none dark:prose-invert prose-a:text-accent"
+        dangerouslySetInnerHTML={{ __html: page.contentHtml }}
+      />
     </article>
   );
 }

@@ -35,17 +35,17 @@ export default function SearchBox() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="search posts..."
-          className="w-full rounded border border-foreground/30 bg-transparent px-2 py-1 text-sm"
+          className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm placeholder:text-muted/70 focus:border-accent"
         />
         <button
           type="submit"
-          className="rounded border border-foreground/30 px-3 py-1 text-sm hover:bg-foreground/10"
+          className="rounded-md border border-border px-4 py-1.5 text-sm transition-colors hover:border-accent hover:text-accent"
         >
           Go
         </button>
       </div>
       {warning && (
-        <p role="alert" className="text-xs text-red-600">
+        <p role="alert" className="text-xs text-red-600 dark:text-red-400">
           Please enter a search term.
         </p>
       )}

@@ -20,8 +20,8 @@ export default async function SearchPage({ searchParams }: Props) {
   if (!query) {
     return (
       <>
-        <h1 className="mb-4 text-2xl font-bold">Search</h1>
-        <p className="opacity-80">Please enter a search term in the box above.</p>
+        <h1 className="mb-4 text-2xl font-bold sm:text-3xl">Search</h1>
+        <p className="text-muted">Please enter a search term in the box above.</p>
       </>
     );
   }
@@ -35,19 +35,22 @@ export default async function SearchPage({ searchParams }: Props) {
   return (
     <>
       {/* query echoed via JSX → HTML-escaped (FR-014) */}
-      <h1 className="mb-6 text-2xl font-bold">
+      <h1 className="mb-6 text-2xl font-bold sm:text-3xl">
         Results for: &ldquo;{query}&rdquo;{" "}
-        <span className="text-base font-normal opacity-70">
+        <span className="text-base font-normal text-muted">
           — {posts.length} post{posts.length === 1 ? "" : "s"} found
         </span>
       </h1>
       {posts.length === 0 ? (
         // FR-015: defined no-results state with a recovery action
         <div className="py-16 text-center">
-          <p className="opacity-80">No posts match your search.</p>
-          <p className="mt-2 opacity-80">
+          <p className="text-muted">No posts match your search.</p>
+          <p className="mt-2 text-muted">
             Try a different keyword, or{" "}
-            <Link href="/" className="underline">
+            <Link
+              href="/"
+              className="text-accent underline underline-offset-4 hover:text-accent-hover"
+            >
               browse all posts
             </Link>
             .

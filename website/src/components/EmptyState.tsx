@@ -4,12 +4,12 @@ import Link from "next/link";
 export default function EmptyState({ message = "Nothing here yet." }: { message?: string }) {
   return (
     <div className="py-16 text-center">
-      <p className="text-3xl opacity-40" aria-hidden>
+      <p className="text-3xl text-muted/50" aria-hidden>
         &#9675;
       </p>
-      <p className="mt-2 opacity-80">{message}</p>
-      <p className="mt-4">
-        <Link href="/" className="underline">
+      <p className="mt-3 text-muted">{message}</p>
+      <p className="mt-5">
+        <Link href="/" className="text-accent underline underline-offset-4 hover:text-accent-hover">
           Browse all posts
         </Link>
       </p>

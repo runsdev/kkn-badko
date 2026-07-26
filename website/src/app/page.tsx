@@ -15,7 +15,7 @@ export default async function HomePage() {
   }
   return (
     <>
-      <h1 className="mb-6 text-2xl font-bold">Latest posts</h1>
+      <h1 className="mb-6 text-2xl font-bold sm:text-3xl">Latest posts</h1>
       {result.posts.length === 0 ? (
         <EmptyState />
       ) : (

@@ -26,7 +26,7 @@ export default async function PostListPage({ params }: Props) {
   }
   return (
     <>
-      <h1 className="mb-6 text-2xl font-bold">Latest posts</h1>
+      <h1 className="mb-6 text-2xl font-bold sm:text-3xl">Latest posts</h1>
       {result.posts.length === 0 ? (
         // FR-006: out-of-range page is a defined empty state
         <EmptyState message="There are no posts on this page." />

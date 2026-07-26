@@ -9,12 +9,13 @@ const options: sanitizeHtml.IOptions = {
   allowedTags: [...sanitizeHtml.defaults.allowedTags, "img", "figure", "figcaption"],
   allowedAttributes: {
     ...sanitizeHtml.defaults.allowedAttributes,
-    img: ["src", "srcset", "sizes", "alt", "title", "width", "height", "loading"],
+    img: ["src", "srcset", "sizes", "alt", "title", "width", "height", "loading", "decoding"],
     a: ["href", "name", "target", "rel"],
   },
   allowedSchemes: ["http", "https", "mailto"],
   transformTags: {
-    img: sanitizeHtml.simpleTransform("img", { loading: "lazy" }), // WF-02 (3)
+    // WF-02 (3) / task 2.3.5: lazy-load + async-decode every content image
+    img: sanitizeHtml.simpleTransform("img", { loading: "lazy", decoding: "async" }),
     a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer" }),
   },
 };

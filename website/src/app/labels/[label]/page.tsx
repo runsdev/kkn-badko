@@ -29,8 +29,11 @@ export default async function LabelPage({ params }: Props) {
   return (
     <>
       <div className="mb-6 flex flex-wrap items-baseline justify-between gap-2">
-        <h1 className="text-2xl font-bold">Posts labeled: &ldquo;{label}&rdquo;</h1>
-        <Link href="/" className="text-sm underline">
+        <h1 className="text-2xl font-bold sm:text-3xl">Posts labeled: &ldquo;{label}&rdquo;</h1>
+        <Link
+          href="/"
+          className="text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
+        >
           All posts
         </Link>
       </div>
