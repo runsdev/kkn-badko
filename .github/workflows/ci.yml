@@ -1,0 +1,36 @@
+# CI for the website (SRS NFR-008: lint + strict TS + build must pass).
+# Uses dummy Blogger credentials — pages render their defined error states
+# (FR-003) during prerender, so the build stays green without real secrets.
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths: ["website/**", ".github/workflows/ci.yml"]
+  pull_request:
+    paths: ["website/**", ".github/workflows/ci.yml"]
+
+jobs:
+  website:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    env:
+      BLOGGER_API_KEY: ci-dummy-key
+      BLOG_ID: "0"
+      ISR_REVALIDATE: "600"
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_CONTACT_EMAIL: ci@example.com
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run typecheck
+      - run: npm run build
