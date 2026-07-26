@@ -8,7 +8,7 @@
 | **Target** | `https://tpamoyudan.blogspot.com/` — "Badan Koordinasi TPA Moyudan" (blog id in `website/.env.local`, `BLOG_ID`) |
 | **Version** | 1.0 |
 | **Date** | 2026-07-26 |
-| **Status** | Analysis complete; execution blocked on decision D-05 (see §4) |
+| **Status** | D-05 resolved 2026-07-26 → **Option B selected**; full archive taken; awaiting OAuth setup + execution (§6) |
 
 ## 1. Purpose
 
@@ -48,6 +48,8 @@ node tools/analyze-source-blog.mjs https://badkotpamoyudan.blogspot.com/
 > - Yes → execute **Option A**.
 > - No, and access can't be recovered → execute **Option B**, accepting loss of 4 comments and original authorship display.
 
+**RESOLVED 2026-07-26: No — Option B selected.** The legacy blog belongs to a Blogger account that authenticated via **Yahoo credentials**, a sign-in path Google no longer supports; the account is unrecoverable. Consequences accepted: the 4 native comments cannot be recreated as comments (their text is preserved in `archive/comments.json`), and migrated posts will show the new blog's author. The unrecoverable account also means the legacy content could disappear permanently if Google ever purges the orphaned account — which is why the full archive (§6 step 0) was taken immediately upon this decision, before execution of anything else.
+
 ## 5. Data mapping (both options)
 
 | Legacy field | Target | Notes |
@@ -68,10 +70,14 @@ node tools/analyze-source-blog.mjs https://badkotpamoyudan.blogspot.com/
 3. Run the import **once only** — re-importing duplicates posts; Blogger has no built-in dedup.
 4. Verify (§7). If the result is wrong, delete the imported posts from the new blog (it currently has 0 posts, so everything present post-import is removable without loss) and retry.
 
-**Option B (API copy)** — only if D-05 = No:
-1. Extend `tools/` with a `migrate-posts.mjs` that reads legacy posts via API key (already proven by the analyzer) and inserts into the new blog via OAuth (authorization-code flow against the existing `runsdev` OAuth client; refresh token kept in `website/.env.local`, never committed — BR-006).
-2. Insert oldest-first with `published` set, verifying each response; throttle to respect the default Blogger API write quota.
-3. Idempotency guard: before each insert, check target for an existing post with the same title + publish date; skip if present.
+**Option B (API copy)** — SELECTED (D-05). Pipeline is archive-first: migration reads from the committed archive, not from the live legacy blog, so it keeps working even if the legacy blog vanishes.
+
+0. **Archive (done 2026-07-26):** `node tools/archive-source-content.mjs` → `archive/posts.json` (35 posts, full bodies), `archive/comments.json` (4), `archive/images/` (20/20 downloaded, 1.1 MB) — all committed. This is the durable backup of the unrecoverable account's content.
+1. **OAuth setup (Owner, one-off):** in Cloud Console (project `runsdev`) add `http://localhost:8765/callback` to the OAuth client's Authorized redirect URIs; put the client id/secret into `website/.env.local` (`GOOGLE_OAUTH_CLIENT_ID/_SECRET`); run `node tools/migrate-posts.mjs auth` signed in as an author/admin of the **new** blog — the refresh token is saved to `.env.local` automatically (never committed, BR-006).
+2. **Dry run (verified 2026-07-26):** `node tools/migrate-posts.mjs migrate` — lists what would be inserted; idempotency check against the target confirmed working (35 to insert, 0 skipped on empty target).
+3. **Test batch:** `node tools/migrate-posts.mjs migrate --execute --limit 1` → check the post on the new blog and the website (`npm run dev`).
+4. **Full run:** `node tools/migrate-posts.mjs migrate --execute` — oldest-first, original `published` dates preserved, labels carried over, throttled 1.5 s/insert; safe to re-run (already-migrated posts are skipped).
+5. Verify (§7) and fill in §9.
 
 ## 7. Verification (either option)
 
@@ -84,13 +90,17 @@ node tools/analyze-source-blog.mjs https://badkotpamoyudan.blogspot.com/
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Double import → duplicated posts | Med | Single execution + §7 count check; target is empty today, making cleanup trivial |
-| Legacy admin access actually unavailable | Med | Fall back to Option B (D-05); comments (4) documented as accepted loss |
-| 2009-era image URLs dead | Low | §7 spot-check; broken images degrade gracefully (alt text); re-uploading is content work for the Owner, out of scope |
-| Blogger write quota (Option B) | Low | 35 posts « daily quota; throttle inserts |
+| ~~Double import → duplicated posts~~ | ~~Med~~ | Closed by design: `migrate-posts.mjs` skips posts already on the target (title + publish date), verified in dry run |
+| ~~Legacy admin access actually unavailable~~ | — | **Realized** (Yahoo-linked account, D-05) → Option B in effect; 4 comments preserved as text in `archive/comments.json` |
+| Legacy content purged by Google (orphaned account) before/after migration | High → Low | **Mitigated 2026-07-26:** full content archive committed to the repo (posts, comments, images); migration reads from the archive, not the live blog |
+| Image URLs (`blogger.googleusercontent.com`, legacy account's storage) die later | Med | All 20 images archived in-repo; if links break post-launch, re-host from `archive/images/` (e.g. re-insert via Blogger editor or serve from `website/public/`) and update the affected posts |
+| Blogger write quota (Option B) | Low | 35 posts « daily quota; 1.5 s throttle between inserts |
 
 ## 9. Execution record
 
-| Date | Option executed | Result | Verified by |
-|------|-----------------|--------|-------------|
-| — | — | pending D-05 | — |
+| Date | Step | Result | Verified by |
+|------|------|--------|-------------|
+| 2026-07-26 | D-05 decided: No legacy access (Yahoo-linked account) → Option B | — | Project Owner |
+| 2026-07-26 | Archive (§6 step 0): 35 posts + 4 comments + 20/20 images | PASS — committed | Developer |
+| 2026-07-26 | Dry run (§6 step 2): 35 to insert, 0 skipped, target has 0 posts | PASS | Developer |
+| — | OAuth setup + test batch + full run (§6 steps 1, 3, 4) | pending Owner | — |
