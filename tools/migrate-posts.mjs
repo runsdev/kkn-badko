@@ -36,7 +36,10 @@ const ARCHIVE = join(ROOT, "projects", "kkn-badko-blog", "03-content-migration",
 const REDIRECT_PORT = 8765;
 const REDIRECT_URI = `http://localhost:${REDIRECT_PORT}/callback`;
 const SCOPE = "https://www.googleapis.com/auth/blogger";
-const INSERT_DELAY_MS = 1500; // stay far under the write quota
+// Blogger's write quota is a small token bucket (observed ~4-5 inserts per
+// burst, then HTTP 429 for a while) — pace generously and retry on 429.
+const INSERT_DELAY_MS = 15_000;
+const RETRY_DELAYS_MS = [30_000, 60_000, 120_000, 240_000, 300_000, 300_000, 300_000];
 
 function loadEnv() {
   const env = {};
@@ -149,7 +152,10 @@ async function accessToken() {
   return tokens.access_token;
 }
 
-const dedupKey = (title, published) => `${title.trim()}|${(published ?? "").slice(0, 10)}`;
+// Title-only key: publish dates shift across timezones (archive is +07:00,
+// the target blog reports its own zone), so date parts don't compare safely.
+// All titles in this corpus are unique — verified before migrating.
+const dedupKey = (title) => title.trim().replace(/\s+/g, " ").toLowerCase();
 
 async function cmdMigrate() {
   const execute = process.argv.includes("--execute");
@@ -160,6 +166,13 @@ async function cmdMigrate() {
 
   const archive = JSON.parse(readFileSync(ARCHIVE, "utf8"));
   const posts = [...archive.posts].sort((a, b) => a.published.localeCompare(b.published));
+
+  // title-only dedup is safe only if archive titles are unique — verify
+  const titleKeys = posts.map((p) => dedupKey(p.title));
+  if (new Set(titleKeys).size !== titleKeys.length) {
+    console.error("FAIL: archive contains duplicate titles — dedup by title is unsafe, aborting");
+    process.exit(1);
+  }
   console.log(
     `Source archive: ${posts.length} posts from "${archive.source.name}" (archived ${archive.archivedAt.slice(0, 10)})`,
   );
@@ -183,7 +196,7 @@ async function cmdMigrate() {
       process.exit(1);
     }
     const data = await res.json();
-    for (const p of data.items ?? []) existing.add(dedupKey(p.title, p.published));
+    for (const p of data.items ?? []) existing.add(dedupKey(p.title));
     pageToken = data.nextPageToken;
   } while (pageToken);
   console.log(`Target currently has ${existing.size} post(s).\n`);
@@ -196,7 +209,7 @@ async function cmdMigrate() {
   for (const post of posts) {
     if (inserted >= limit) break;
     const label = `"${post.title}" (${post.published.slice(0, 10)})`;
-    if (existing.has(dedupKey(post.title, post.published))) {
+    if (existing.has(dedupKey(post.title))) {
       skipped++;
       console.log(`  SKIP    ${label} — already on target`);
       continue;
@@ -206,25 +219,35 @@ async function cmdMigrate() {
       console.log(`  WOULD   ${label}  labels: ${(post.labels ?? []).join(", ") || "-"}`);
       continue;
     }
-    const res = await fetch(`${API}/blogs/${targetBlogId}/posts`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        kind: "blogger#post",
-        title: post.title,
-        content: post.content ?? "",
-        labels: post.labels ?? [],
-        published: post.published, // preserve the original publish date
-      }),
-    });
-    if (res.ok) {
-      const created = await res.json();
-      inserted++;
-      console.log(`  INSERT  ${label} → ${created.url}`);
-    } else {
-      failed++;
-      const body = await res.json().catch(() => ({}));
-      console.error(`  FAIL    ${label} — HTTP ${res.status} ${body?.error?.message ?? ""}`);
+
+    let done = false;
+    for (let attempt = 0; !done && attempt <= RETRY_DELAYS_MS.length; attempt++) {
+      const res = await fetch(`${API}/blogs/${targetBlogId}/posts`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          kind: "blogger#post",
+          title: post.title,
+          content: post.content ?? "",
+          labels: post.labels ?? [],
+          published: post.published, // preserve the original publish date
+        }),
+      });
+      if (res.ok) {
+        const created = await res.json();
+        inserted++;
+        done = true;
+        console.log(`  INSERT  ${label} → ${created.url}`);
+      } else if (res.status === 429 && attempt < RETRY_DELAYS_MS.length) {
+        const wait = RETRY_DELAYS_MS[attempt];
+        console.log(`  429     ${label} — rate-limited, retrying in ${wait / 1000}s (attempt ${attempt + 1})`);
+        await sleep(wait);
+      } else {
+        failed++;
+        done = true;
+        const body = await res.json().catch(() => ({}));
+        console.error(`  FAIL    ${label} — HTTP ${res.status} ${body?.error?.message ?? ""}`);
+      }
     }
     await sleep(INSERT_DELAY_MS);
   }
