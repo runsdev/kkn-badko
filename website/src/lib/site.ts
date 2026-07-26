@@ -9,7 +9,12 @@ export const SITE_DESCRIPTION =
 export const POSTS_PER_PAGE = 10;
 
 export function siteUrl(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  // explicit env wins; on Vercel fall back to the auto-injected production
+  // host so sitemap/canonical/OG URLs are correct without manual config
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  return "http://localhost:3000";
 }
 
 // FR-019: Contact page mailto target
