@@ -7,7 +7,7 @@
 | **Version** | 1.1 (complete — all sections; open items GAP-01…04 resolved) |
 | **Date** | 2026-07-24 (v1.0: 2026-06-29) |
 | **Methodology** | Waterfall (IEEE 830 / IEEE 29148) |
-| **Status** | Complete — §1–§3.6 generated; audited COMPLIANT (see `Audit_Report.md`); pending M1 stakeholder ratification of Appendix A decisions |
+| **Status** | **BASELINED** — audited COMPLIANT (see `Audit_Report.md`); M1 sign-off granted 2026-07-26, decisions D-01…D-04 ratified (Appendix B) |
 | **Traceability sources** | all files in `_context/` |
 | **Governing standards** | IEEE Std 830-1998, IEEE Std 29148-2018, IEEE Std 1016, ISO/IEC 25010 / 25023 / 25051 / 25062 |
 
@@ -723,10 +723,11 @@ No requirement text, priority, or trace changed as a result of these decisions e
 |---------|------|--------|---------|
 | 1.0 | 2026-06-29 | Requirements pipeline (skills 01→08) | Initial complete draft §1–§3.6; audited PARTIALLY COMPLIANT (4 open gaps). |
 | 1.1 | 2026-07-24 | Developer | Resolved GAP-01…04 via decisions D-01…D-04 (Appendix A); removed all `[CONTEXT-GAP]` markers; added Appendices A–B; audit verdict updated to COMPLIANT. |
+| 1.1 (ratified) | 2026-07-26 | Project Owner | **M1 sign-off granted.** Decisions D-01…D-04 ratified; baseline frozen for Phase 2. |
 
-**Approval.** This document is submitted for M1 (Requirements approved) sign-off per `PROJECT_PLAN.md` §6.
+**Approval.** M1 (Requirements approved) sign-off per `PROJECT_PLAN.md` §6 was **granted on 2026-07-26**, ratifying decisions D-01…D-04 (Appendix A).
 
 | Role | Name | Signature / Date |
 |------|------|------------------|
-| Project Owner / Stakeholder | ______________________ | ______________________ |
-| Developer | ______________________ | ______________________ |
+| Project Owner / Stakeholder | runsdev | Approved / 2026-07-26 |
+| Developer | runsdev | Approved / 2026-07-26 |

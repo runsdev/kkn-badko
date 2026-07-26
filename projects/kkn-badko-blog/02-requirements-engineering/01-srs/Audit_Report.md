@@ -4,7 +4,7 @@
 **Audited artifact:** `02-requirements-engineering/01-srs/SRS_Draft.md`
 **Context audited:** all files in `_context/`
 **Date:** 2026-06-29 (updated 2026-07-24 — gap closure pass against SRS v1.1)
-**Overall verdict:** **COMPLIANT** — requirements baseline is sound; all open items GAP-01…05 are resolved (see §5 and SRS Appendix A). Decisions D-01…D-04 await formal stakeholder ratification at M1. No blocking defects.
+**Overall verdict:** **COMPLIANT** — requirements baseline is sound; all open items GAP-01…05 are resolved (see §5 and SRS Appendix A). Decisions D-01…D-04 were **ratified at M1 sign-off on 2026-07-26** (SRS Appendix B); the baseline is frozen for Phase 2. No blocking defects.
 
 ---
 
