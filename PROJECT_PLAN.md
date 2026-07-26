@@ -9,14 +9,14 @@
 
 ## 1. Executive Summary
 
-This project delivers a fullstack blog website built with **Next.js**, sourcing and managing content through the **Google Blogger API**. The work is organized into **3 main phases**, and each main phase is broken into **4 sub-phases** (12 sub-phases total).
+This project delivers a fullstack blog website built with **Next.js**, sourcing and managing content through the **Google Blogger API**. The work is organized into **3 main phases** broken into **13 sub-phases** (Phase 2 gained sub-phase 2.5, a scope addendum approved 2026-07-26).
 
 | Phase | Name | Estimated Effort |
 |-------|------|------------------|
 | 1 | Requirement Gathering | 20 hrs |
-| 2 | Website Building | 160 hrs |
+| 2 | Website Building | 168 hrs |
 | 3 | Socialization to Stakeholders | 20 hrs |
-| **Total** | | **200 hrs** |
+| **Total** | | **208 hrs** |
 
 At a nominal **40 productive hrs/week**, the calendar duration is roughly **5 weeks**.
 
@@ -71,7 +71,7 @@ At a nominal **40 productive hrs/week**, the calendar duration is roughly **5 we
 
 ---
 
-### PHASE 2 — Website Building (160 hrs)
+### PHASE 2 — Website Building (168 hrs)
 
 > Goal: Design, implement, and ship the fully working blog.
 
@@ -102,6 +102,9 @@ At a nominal **40 productive hrs/week**, the calendar duration is roughly **5 we
 | | 2.4.3 Performance, caching & ISR tuning (Lighthouse) | 6 hrs |
 | | 2.4.4 Unit / integration tests | 8 hrs |
 | | 2.4.5 CI/CD setup + production deploy | 4 hrs |
+| **2.5 Content migration** (8 hrs, addendum 2026-07-26) | 2.5.1 Analyze legacy blog `badkotpamoyudan.blogspot.com` via API (read-only) | 2 hrs |
+| | 2.5.2 Execute migration into the new blog (Option A native import, or B API copy — per decision D-05) | 3 hrs |
+| | 2.5.3 Verify counts/labels/comments on the new blog & record result | 3 hrs |
 
 **Deliverables:** Working deployed website, source code repository, test suite, deployment pipeline.
 **Exit criteria:** All core features functional in production; QA passes against Phase 1 requirements.
@@ -170,7 +173,8 @@ Week 6        : Phase 3 (Socialization)           ── 20 hrs
 | Blogger API quota limits | Medium | Cache + ISR; minimize live calls |
 | API auth/credential delays | High | Secure access during Phase 1 (1.3) |
 | Scope creep | High | Lock scope at M1; change requests re-estimated |
-| Content not ready at launch | Medium | Use sample/seed content; content owner timeline |
+| Content not ready at launch | Medium | Use sample/seed content; content owner timeline; 2.5 migrates 35 legacy posts as launch content |
+| Legacy blog admin access unavailable (2.5) | Medium | Fall back to API copy (Option B, D-05); 4 comments documented as accepted loss |
 | Performance/SEO gaps | Medium | Lighthouse audit in 2.4 before launch |
 
 ---
@@ -192,8 +196,8 @@ Week 6        : Phase 3 (Socialization)           ── 20 hrs
 | Phase | Sub-phases | Tasks | Hours |
 |-------|-----------|-------|-------|
 | 1. Requirement Gathering | 1.1–1.4 | 8 | 20 |
-| 2. Website Building | 2.1–2.4 | 25 | 160 |
+| 2. Website Building | 2.1–2.5 | 28 | 168 |
 | 3. Socialization | 3.1–3.4 | 8 | 20 |
-| **Total** | **12** | **41** | **200** |
+| **Total** | **13** | **44** | **208** |
 
 > Every task is scoped to **≤ 8 hours** for easier tracking, assignment, and daily progress check-ins.

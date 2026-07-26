@@ -1,0 +1,384 @@
+{
+  "analyzedAt": "2026-07-26T10:33:07.599Z",
+  "source": {
+    "id": "73173088394329522",
+    "name": "Badan Koordinasi TKA - TPA Kecamatan Moyudan",
+    "url": "https://badkotpamoyudan.blogspot.com/"
+  },
+  "totals": {
+    "posts": 35,
+    "pages": 0,
+    "comments": 4,
+    "images": 20,
+    "unlabeledPosts": 0
+  },
+  "dateRange": [
+    "2009-05-21T06:01:00+07:00",
+    "2011-10-21T13:33:00+07:00"
+  ],
+  "labels": {
+    "FOTO": 20,
+    "BERITA": 7,
+    "TIPS": 5,
+    "PROFIL": 2,
+    "LINK": 1,
+    "BCM": 1
+  },
+  "imageHosts": {
+    "blogger.googleusercontent.com": 20
+  },
+  "posts": [
+    {
+      "id": "8811517354778366157",
+      "title": "LINK",
+      "url": "https://badkotpamoyudan.blogspot.com/2011/10/link.html",
+      "published": "2011-10-21T13:33:00+07:00",
+      "labels": [
+        "LINK"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "5093320058063412256",
+      "title": "TUYUL",
+      "url": "https://badkotpamoyudan.blogspot.com/2011/02/tuyul.html",
+      "published": "2011-02-06T21:59:00+07:00",
+      "labels": [
+        "TIPS"
+      ],
+      "comments": 1
+    },
+    {
+      "id": "7447571328703390864",
+      "title": "Pujian untuk Santri",
+      "url": "https://badkotpamoyudan.blogspot.com/2011/02/pujian-untuk-santri.html",
+      "published": "2011-02-06T21:57:00+07:00",
+      "labels": [
+        "TIPS"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "3416140219421533846",
+      "title": "SATE vs BAYEM",
+      "url": "https://badkotpamoyudan.blogspot.com/2011/02/sate-vs-bayem.html",
+      "published": "2011-02-06T21:45:00+07:00",
+      "labels": [
+        "TIPS"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "7399819988419760158",
+      "title": "3 ER",
+      "url": "https://badkotpamoyudan.blogspot.com/2011/02/3-er.html",
+      "published": "2011-02-06T21:39:00+07:00",
+      "labels": [
+        "TIPS"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "8913019970208952812",
+      "title": "Tips Menenangkan Santri",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/12/tips-menenangkan-santri.html",
+      "published": "2010-12-23T22:18:00+07:00",
+      "labels": [
+        "BCM",
+        "TIPS"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "2663245681656252658",
+      "title": "TPA AL-HUDA KALIDUREN 3",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-al-huda.html",
+      "published": "2010-11-16T17:15:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "2096328370307054010",
+      "title": "TPA AT-TAQWA SANGUBANYU",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-at-taqwa.html",
+      "published": "2010-11-16T17:14:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "3013104070086351734",
+      "title": "TPA NURUL IMAN GOSER",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-nurul-iman.html",
+      "published": "2010-11-16T17:13:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "695367975519209633",
+      "title": "TPA AL-AMIN PENDULAN",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-al-amin.html",
+      "published": "2010-11-16T17:12:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "7798661835554597046",
+      "title": "TPA SABIILUL MUTTAQIIN KALIDUREN 1",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-sabiilul.html",
+      "published": "2010-11-16T17:11:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "8947455748176535145",
+      "title": "TPA AR-ROHMAH KARANG",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-ar-rohmah.html",
+      "published": "2010-11-16T17:10:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "4478777419752928044",
+      "title": "TPA AL-FURQON SUMBERARUM",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-al-furqon.html",
+      "published": "2010-11-16T17:08:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "406648054951551285",
+      "title": "TPA ABDUL MANAN KEDUNGBANTENG",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-abdul-manan.html",
+      "published": "2010-11-16T17:07:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "5474152160912370605",
+      "title": "TPA AL-HIDAYAH GEDONGAN",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-al-hidayah_16.html",
+      "published": "2010-11-16T17:05:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "5651515794770331892",
+      "title": "TPA AN-NUUR BETAKAN",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-nuur-betakan.html",
+      "published": "2010-11-16T17:03:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "2478737475695347401",
+      "title": "TPA AS-SALAM II KRUWET",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-as-salam-ii.html",
+      "published": "2010-11-16T17:01:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "1040679053391257756",
+      "title": "TPA HIDAYATULLOH CELUNGAN",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-hidayatulloh.html",
+      "published": "2010-11-16T17:00:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "1512457632059734397",
+      "title": "TPA AL-HIDAYAH SERMO",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-al-hidayah.html",
+      "published": "2010-11-16T16:57:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "4795522876610628272",
+      "title": "TPA AL-FALAH SUMBERSARI",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-al-falah.html",
+      "published": "2010-11-16T16:55:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "3102705852498680922",
+      "title": "TPA AS-SALAM SUMBERRAHAYU",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-tpa-as-salam.html",
+      "published": "2010-11-16T16:53:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "4652972963005519845",
+      "title": "TPA MUHAMMADIYAH KEMBANGAN",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/tpa-muhammadiyah-kembangan.html",
+      "published": "2010-11-16T16:51:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 2
+    },
+    {
+      "id": "7023216699695241484",
+      "title": "Wisuda Ibu-ibu TPA As-Salam II Kruwet",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-ibu-ibu-tpa-as-salam-ii-kruwet.html",
+      "published": "2010-11-16T16:50:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "7986159196533151944",
+      "title": "TPA AL-HIKMAH TEGAL REJO BERSAMA PANITIA  WISUDA",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/isudawati-tpa-al-hikmah-tegal-rejo.html",
+      "published": "2010-11-16T16:47:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "1105501548938970112",
+      "title": "Panitia",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/panitia.html",
+      "published": "2010-11-16T16:46:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "594102208387780888",
+      "title": "Panitia Lokal",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/panitia-lokal.html",
+      "published": "2010-11-16T16:44:00+07:00",
+      "labels": [
+        "FOTO"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "9161557879196779889",
+      "title": "Wisuda dan Khataman ke VI Tahun 2010",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/11/wisuda-dan-khataman-ke-vi-tahun-2010_03.html",
+      "published": "2010-11-03T09:56:00+07:00",
+      "labels": [
+        "BERITA"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "1403343791712838752",
+      "title": "FAS  Kabupaten Sleman 2010",
+      "url": "https://badkotpamoyudan.blogspot.com/2010/09/fasi-2010-kabupaten-sleman.html",
+      "published": "2010-09-17T14:03:00+07:00",
+      "labels": [
+        "BERITA"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "137189972119728988",
+      "title": "FAS Kabupaten Sleman 2009",
+      "url": "https://badkotpamoyudan.blogspot.com/2009/07/fas-kabupaten-sleman-2009.html",
+      "published": "2009-07-18T05:26:00+07:00",
+      "labels": [
+        "BERITA"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "6327835564055735804",
+      "title": "Wisuda Badko Daerah TKA – TPA Kabupaten Sleman Tahun 2009",
+      "url": "https://badkotpamoyudan.blogspot.com/2009/07/wisuda-badko-daerah-tka-tpa-kabupaten.html",
+      "published": "2009-07-06T06:15:00+07:00",
+      "labels": [
+        "BERITA"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "328056289464797686",
+      "title": "Diklat Ustadz-Ustadzah TKA – TPA se-Sumberrahayu Tahun 2009",
+      "url": "https://badkotpamoyudan.blogspot.com/2009/07/diklat-ustadz-ustadzah-tka-tpa-se.html",
+      "published": "2009-07-06T06:11:00+07:00",
+      "labels": [
+        "BERITA"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "8365485059458357522",
+      "title": "Pendidikan dan Pelatihan  Ustadz/ah TKA – TPA se-Kecamatan Moyudan Tahun 2008",
+      "url": "https://badkotpamoyudan.blogspot.com/2009/07/pendidikan-dan-pelatihan-ustadzah-tka.html",
+      "published": "2009-07-06T05:57:00+07:00",
+      "labels": [
+        "BERITA"
+      ],
+      "comments": 1
+    },
+    {
+      "id": "2175618649825357678",
+      "title": "Pelantikan dan Rapat Kerja Badan Koordinasi TKA – TPA Kecamatan Moyudan periode 2007 – 2010",
+      "url": "https://badkotpamoyudan.blogspot.com/2009/07/pelantikan-dan-rapat-kerja-badan.html",
+      "published": "2009-07-06T05:26:00+07:00",
+      "labels": [
+        "BERITA"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "5932599144064134327",
+      "title": "Susunan Pengurus Badko 2007 -2010",
+      "url": "https://badkotpamoyudan.blogspot.com/2009/05/susunan-pengurus-badko-2007-2010_22.html",
+      "published": "2009-05-22T08:01:00+07:00",
+      "labels": [
+        "PROFIL"
+      ],
+      "comments": 0
+    },
+    {
+      "id": "3153849029828426947",
+      "title": "Daftar TPA se-Kecamatan Moyudan",
+      "url": "https://badkotpamoyudan.blogspot.com/2009/05/daftar-tpa-se-kecamatan-moyudan.html",
+      "published": "2009-05-21T06:01:00+07:00",
+      "labels": [
+        "PROFIL"
+      ],
+      "comments": 0
+    }
+  ],
+  "pages": []
+}
