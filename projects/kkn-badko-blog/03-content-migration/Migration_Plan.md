@@ -8,7 +8,7 @@
 | **Target** | `https://tpamoyudan.blogspot.com/` — "Badan Koordinasi TPA Moyudan" (blog id in `website/.env.local`, `BLOG_ID`) |
 | **Version** | 1.0 |
 | **Date** | 2026-07-26 |
-| **Status** | D-05 resolved 2026-07-26 → **Option B selected**; full archive taken; awaiting OAuth setup + execution (§6) |
+| **Status** | **COMPLETE 2026-07-26** — Option B executed and verified: 35/35 posts on the target blog (§9) |
 
 ## 1. Purpose
 
@@ -103,4 +103,7 @@ node tools/analyze-source-blog.mjs https://badkotpamoyudan.blogspot.com/
 | 2026-07-26 | D-05 decided: No legacy access (Yahoo-linked account) → Option B | — | Project Owner |
 | 2026-07-26 | Archive (§6 step 0): 35 posts + 4 comments + 20/20 images | PASS — committed | Developer |
 | 2026-07-26 | Dry run (§6 step 2): 35 to insert, 0 skipped, target has 0 posts | PASS | Developer |
-| — | OAuth setup + test batch + full run (§6 steps 1, 3, 4) | pending Owner | — |
+| 2026-07-26 | OAuth setup + first execute run by Owner: 9 inserted, then HTTP 429 (write quota); 1 duplicate created (dedup keyed on title+date, but dates shift timezones) | partial | Owner |
+| 2026-07-26 | Fixes: title-only dedup + 429 backoff (commit `878f1b9`); duplicate post moved to Blogger trash | PASS | Developer |
+| 2026-07-26 | Full run: **26 inserted, 9 skipped, 0 failed** → target has 35/35 posts | PASS | Developer |
+| 2026-07-26 | §7 verification: 35 posts, identical label histogram (FOTO 20 / BERITA 7 / TIPS 5 / PROFIL 2 / LINK 1 / BCM 1), 20/20 images on Google CDN; website spot-check — home lists newest-first, `/labels/FOTO` filters, post detail renders with images (dates display in the target blog's timezone, one day earlier than source — cosmetic, accepted) | **PASS — migration complete** | Developer |
