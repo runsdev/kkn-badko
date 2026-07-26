@@ -13,7 +13,10 @@ export default function Pagination({ page, totalPages }: { page: number; totalPa
           &larr; Newer
         </Link>
       ) : (
-        <span className="rounded border border-border px-3 py-1.5 text-muted/50" aria-hidden>
+        <span
+          className="rounded border border-dashed border-border px-3 py-1.5 text-muted"
+          aria-hidden
+        >
           &larr; Newer
         </span>
       )}
@@ -25,7 +28,10 @@ export default function Pagination({ page, totalPages }: { page: number; totalPa
           Older &rarr;
         </Link>
       ) : (
-        <span className="rounded border border-border px-3 py-1.5 text-muted/50" aria-hidden>
+        <span
+          className="rounded border border-dashed border-border px-3 py-1.5 text-muted"
+          aria-hidden
+        >
           Older &rarr;
         </span>
       )}
