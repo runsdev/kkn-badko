@@ -1,5 +1,6 @@
 import "server-only";
 import { env } from "@/lib/env";
+import { cardImage } from "@/lib/image";
 import { sanitize, toPlainText } from "@/lib/sanitize";
 import { POSTS_PER_PAGE } from "@/lib/site";
 import type { Post, PostComment, PostListResult, PostSummary, StaticPage } from "@/lib/types";
@@ -14,7 +15,7 @@ import type { Post, PostComment, PostListResult, PostSummary, StaticPage } from 
 const API_BASE = "https://www.googleapis.com/blogger/v3";
 const EXCERPT_LENGTH = 200;
 const MAX_PAGE_WALK = 100; // hard stop for token walking on absurd page numbers
-const LIST_FIELDS = "nextPageToken,items(id,url,title,published,labels,content)";
+const LIST_FIELDS = "nextPageToken,items(id,url,title,published,labels,content,author/displayName)";
 const POST_FIELDS = "id,url,title,published,labels,content,author/displayName";
 
 export class BloggerApiError extends Error {
@@ -74,6 +75,10 @@ function toSummary(raw: RawPost): PostSummary {
     published: raw.published,
     labels: raw.labels ?? [],
     excerpt: makeExcerpt(raw.content ?? ""),
+    // LIST_FIELDS already asks for `content`, so the thumbnail is free
+    image: cardImage(raw.content ?? ""),
+    // and for author, so the Kontributor list costs no extra request either
+    author: raw.author?.displayName ?? "",
   };
 }
 
@@ -119,6 +124,30 @@ export async function listPostsPage(page: number): Promise<PostListResult> {
     ...(pageToken ? { pageToken } : {}),
   });
   return { posts: (data.items ?? []).map(toSummary), page, totalPages, totalPosts };
+}
+
+// The whole archive as summaries, newest-first — one walk.
+//
+// The redesigned home page (WF-08) needs label counts, a per-year histogram,
+// the TPA directory, and three curated sections. Fetching those as six
+// separate label queries would burn six API calls per revalidation for a
+// 35-post blog; one walk (a single request at this size) covers all of them
+// and everything else is derived in memory. Cached like every other call, so
+// the quota rule (BR-003, NFR-002) is respected either way.
+export async function listArchiveIndex(): Promise<PostSummary[]> {
+  const all: PostSummary[] = [];
+  let pageToken: string | undefined;
+  for (let hop = 0; hop < MAX_PAGE_WALK; hop++) {
+    const data = await bloggerFetch<RawPostList>("/posts", {
+      maxResults: "50",
+      fields: LIST_FIELDS,
+      ...(pageToken ? { pageToken } : {}),
+    });
+    all.push(...(data.items ?? []).map(toSummary));
+    if (!data.nextPageToken) break;
+    pageToken = data.nextPageToken;
+  }
+  return all;
 }
 
 // FR-007/010 — resolve /posts/[slug] by scanning the (cached) post index,
@@ -176,13 +205,41 @@ export async function getPostsByLabel(label: string): Promise<PostSummary[]> {
   return (data.items ?? []).map(toSummary);
 }
 
-// FR-013/014/015 — query is URL-encoded by URLSearchParams (P-3)
+// FR-013/014/015 — search over the archive.
+//
+// Deliberately NOT Blogger's /posts/search. That endpoint hard-caps at 10
+// items, ignores maxResults, and — measured against this blog — returns a
+// nextPageToken forever while re-serving the same 10 posts: 12 hops yielded
+// 120 items and 10 distinct ones. So it can neither be trusted for a total nor
+// paged past. Using it meant "wisuda" reported "10 catatan" when 20 of the 35
+// posts match, with results 11+ unreachable.
+//
+// The archive is 35 posts and already fetched whole for the home page, so the
+// match is done here instead: full text (title + body + labels), complete, and
+// on the same cached requests as listArchiveIndex — identical fetch URL and
+// options, so the ISR data cache serves both (BR-003, NFR-002).
 export async function searchPosts(q: string): Promise<PostSummary[]> {
-  const data = await bloggerFetch<RawPostList>("/posts/search", {
-    q,
-    fields: LIST_FIELDS,
-  });
-  return (data.items ?? []).map(toSummary);
+  const needle = q.trim().toLowerCase();
+  if (!needle) return [];
+
+  const matches: PostSummary[] = [];
+  let pageToken: string | undefined;
+  for (let hop = 0; hop < MAX_PAGE_WALK; hop++) {
+    const data = await bloggerFetch<RawPostList>("/posts", {
+      maxResults: "50",
+      fields: LIST_FIELDS,
+      ...(pageToken ? { pageToken } : {}),
+    });
+    for (const raw of data.items ?? []) {
+      const haystack = [raw.title, toPlainText(raw.content ?? ""), (raw.labels ?? []).join(" ")]
+        .join(" ")
+        .toLowerCase();
+      if (haystack.includes(needle)) matches.push(toSummary(raw));
+    }
+    if (!data.nextPageToken) break;
+    pageToken = data.nextPageToken;
+  }
+  return matches;
 }
 
 // FR-016 — read-only native Blogger comments. Returns null on failure so the

@@ -1,49 +1,512 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* ==========================================================================
+   Design tokens — website/DESIGN.md (Notion-design-analysis, alpha)
+   Applied per projects/kkn-badko-blog/06-redesign/Redesign_Plan.md (D-06).
+
+   Two deliberate deviations from DESIGN.md, both forced by WCAG 2.1 AA
+   (NFR-016). See Redesign_Plan.md §2.4 for the computed ratios:
+     1. DESIGN.md badge-tag-green (brand-green on mint) is 2.50:1 — replaced
+        by the derived --teal-deep at 5.33:1.
+     2. DESIGN.md assigns `steel` to tertiary text; it clears 4.5:1 by only
+        0.04, so tertiary text uses `slate` (6.80:1). steel/stone/muted are
+        non-text tokens here.
+   Never dim text by lowering alpha — pick a darker token. An earlier
+   text-muted/50 at 1.96:1 was a logged a11y defect (QA_Report.md:37).
+
+   Light-only, deliberately. DESIGN.md Known Gaps (:818) records that dark
+   mode values were never surfaced, and the pastel tint system is a
+   light-mode device — a dark variant needs its own tint ramp and its own
+   contrast pass, not an inversion. The previous emerald theme's
+   prefers-color-scheme block is therefore dropped rather than half-ported;
+   color-scheme: light keeps native controls and scrollbars consistent.
+   Tracked in Redesign_Plan.md §10.
+   ========================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #1c1917;
-  --muted: #78716c;
-  --surface: #fafaf9;
-  --border: #e7e5e4;
-  --accent: #047857;
-  --accent-hover: #065f46;
+  /* Brand & primary */
+  --primary: #5645d4;
+  --primary-pressed: #4534b3;
+  --primary-deep: #3a2a99;
+  --on-primary: #ffffff;
+
+  --navy: #0a1530;
+  --navy-deep: #070f24;
+  --navy-mid: #1a2a52;
+
+  --link: #0075de;
+  --link-pressed: #005bab;
+
+  /* Brand spectrum — the label palette (see lib/labels.ts) */
+  --orange: #dd5b00;
+  --orange-deep: #793400;
+  --pink: #ff64c8;
+  --pink-deep: #a02e6d;
+  --purple: #7b3ff2;
+  --purple-300: #d6b6f6;
+  --purple-800: #391c57;
+  --teal: #2a9d99;
+  --teal-deep: #1c6b68; /* derived — DESIGN.md has no accessible teal/green text tone */
+  --green: #1aae39;
+  --yellow: #f5d75e;
+  --brown: #523410;
+
+  /* Card tints */
+  --tint-peach: #ffe8d4;
+  --tint-rose: #fde0ec;
+  --tint-mint: #d9f3e1;
+  --tint-lavender: #e6e0f5;
+  --tint-sky: #dcecfa;
+  --tint-yellow: #fef7d6;
+  --tint-yellow-bold: #f9e79f;
+  --tint-cream: #f8f5e8;
+  --tint-gray: #f0eeec;
+
+  /* Surfaces */
+  --canvas: #ffffff;
+  --surface: #f6f5f4;
+  --surface-soft: #fafaf9;
+
+  /* Hairlines */
+  --hairline: #e5e3df;
+  --hairline-soft: #ede9e4;
+  --hairline-strong: #c8c4be;
+
+  /* Text */
+  --ink-deep: #000000;
+  --ink: #1a1a1a;
+  --charcoal: #37352f;
+  --slate: #5d5b54;
+  --steel: #787671;
+  --stone: #a4a097;
+  --muted: #bbb8b1;
+  --on-dark: #ffffff;
+  --on-dark-muted: #a4a097;
+
+  /* Semantic */
+  --success: #1aae39;
+  --warning: #dd5b00;
+  /* Darkened from DESIGN.md's #e03131, which is 4.51:1 on canvas — passing by
+     one hundredth, and it renders at 12px over a translucent header. This is
+     5.46:1 on canvas and 5.01:1 on surface. */
+  --error: #c92a2a;
+
+  /* Elevation — DESIGN.md §Elevation & Depth */
+  --elev-1: rgba(15, 15, 15, 0.04) 0px 1px 2px 0px;
+  --elev-2: rgba(15, 15, 15, 0.08) 0px 4px 12px 0px;
+  --elev-3: rgba(15, 15, 15, 0.2) 0px 24px 48px -8px;
+  --elev-4: rgba(15, 15, 15, 0.16) 0px 16px 48px -8px;
+
+  /* Motion — DESIGN.md:819 recommends 150–200ms ease */
+  --duration-exit: 150ms;
+  --duration-enter: 210ms;
+  --duration-move: 400ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-pressed: var(--primary-pressed);
+  --color-primary-deep: var(--primary-deep);
+  --color-on-primary: var(--on-primary);
+
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-navy-mid: var(--navy-mid);
+
+  --color-link: var(--link);
+  --color-link-pressed: var(--link-pressed);
+
+  --color-orange: var(--orange);
+  --color-orange-deep: var(--orange-deep);
+  --color-pink: var(--pink);
+  --color-pink-deep: var(--pink-deep);
+  --color-purple: var(--purple);
+  --color-purple-300: var(--purple-300);
+  --color-purple-800: var(--purple-800);
+  --color-teal: var(--teal);
+  --color-teal-deep: var(--teal-deep);
+  --color-green: var(--green);
+  --color-yellow: var(--yellow);
+  --color-brown: var(--brown);
+
+  --color-tint-peach: var(--tint-peach);
+  --color-tint-rose: var(--tint-rose);
+  --color-tint-mint: var(--tint-mint);
+  --color-tint-lavender: var(--tint-lavender);
+  --color-tint-sky: var(--tint-sky);
+  --color-tint-yellow: var(--tint-yellow);
+  --color-tint-yellow-bold: var(--tint-yellow-bold);
+  --color-tint-cream: var(--tint-cream);
+  --color-tint-gray: var(--tint-gray);
+
+  --color-canvas: var(--canvas);
   --color-surface: var(--surface);
-  --color-border: var(--border);
-  --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface-soft: var(--surface-soft);
+
+  --color-hairline: var(--hairline);
+  --color-hairline-soft: var(--hairline-soft);
+  --color-hairline-strong: var(--hairline-strong);
+
+  --color-ink-deep: var(--ink-deep);
+  --color-ink: var(--ink);
+  --color-charcoal: var(--charcoal);
+  --color-slate: var(--slate);
+  --color-steel: var(--steel);
+  --color-stone: var(--stone);
+  --color-muted: var(--muted);
+  --color-on-dark: var(--on-dark);
+  --color-on-dark-muted: var(--on-dark-muted);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+
+  /* Aliases so the pre-redesign utility names keep resolving */
+  --color-background: var(--canvas);
+  --color-foreground: var(--ink);
+  --color-border: var(--hairline);
+
+  /* Type — DESIGN.md §Typography */
+  --font-display: var(--font-plus-jakarta), var(--font-inter), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", Helvetica, sans-serif;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+
+  --shadow-elev-1: var(--elev-1);
+  --shadow-elev-2: var(--elev-2);
+  --shadow-elev-3: var(--elev-3);
+  --shadow-elev-4: var(--elev-4);
+
+  --container-shell: 1280px;
 }
 
-@media (prefers-color-scheme: dark) {
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+html {
+  color-scheme: light;
+  /* Next.js 16 no longer overrides scroll-behavior; offset the sticky header
+     so in-page anchors don't land underneath it. */
+  scroll-padding-top: 5.5rem;
+}
+
+/* Shell gutter — DESIGN.md's 32px desktop gutter, stepped down on smaller
+   screens, and never narrower than the device's safe area. The hero band and
+   footer are full-bleed, so on a notched phone in landscape a flat 1rem would
+   put the wordmark under the cutout. */
+:root {
+  --shell-gutter: max(1rem, env(safe-area-inset-left), env(safe-area-inset-right));
+}
+
+@media (min-width: 40rem) {
   :root {
-    --background: #0c0a09;
-    --foreground: #e7e5e4;
-    --muted: #a8a29e;
-    --surface: #1c1917;
-    --border: #292524;
-    --accent: #34d399;
-    --accent-hover: #6ee7b7;
+    --shell-gutter: max(1.5rem, env(safe-area-inset-left), env(safe-area-inset-right));
+  }
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --shell-gutter: max(2rem, env(safe-area-inset-left), env(safe-area-inset-right));
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  /* prevents the double-tap zoom delay on touch */
+  touch-action: manipulation;
 }
 
-/* Visible keyboard focus everywhere (WCAG 2.1 AA, NFR-016) */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+/* Counts, dates and the year timeline read as columns of figures. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Visible keyboard focus everywhere (WCAG 2.1 AA, NFR-016).
+   No border-radius here. This rule is unlayered, and Tailwind emits its
+   utilities into @layer utilities — unlayered declarations beat layered ones
+   regardless of specificity, so a radius here would override every rounded-*
+   class on focus and square off pills, cards and buttons. Outlines have
+   followed the element's own border-radius since Chrome 94 anyway. */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
-  border-radius: 2px;
+}
+
+/* On the navy band a purple ring is nearly invisible. */
+.on-navy :focus-visible {
+  outline-color: var(--on-dark);
+}
+
+/* ==========================================================================
+   Prose — sanitized Blogger HTML
+   ========================================================================== */
+
+.prose-archive {
+  --tw-prose-body: var(--charcoal);
+  --tw-prose-headings: var(--ink);
+  --tw-prose-links: var(--link);
+  --tw-prose-bold: var(--ink);
+  --tw-prose-quotes: var(--slate);
+  --tw-prose-hr: var(--hairline);
+  --tw-prose-captions: var(--slate);
+}
+
+/* Legacy Blogger images carry no width/height, so nothing reserves their
+   space (the CLS 0.128 in QA_Report.md:39). Their intrinsic ratio is not
+   recoverable from the URL, so space is reserved by design instead: a
+   fixed-aspect tinted frame with object-fit contain. Deterministic, and it
+   stops 320px photos from looking accidental. */
+.prose-archive :where(img) {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: var(--frame-tint, var(--tint-gray));
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--hairline);
+  padding: 0.5rem;
+  margin-inline: auto;
+}
+
+.prose-archive :where(a) {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+/* Blogger content ships inline font-size and color on spans. Let the tokens
+   win so 2009-era markup can't reintroduce a contrast failure. */
+.prose-archive :where(span[style]),
+.prose-archive :where(font) {
+  font-size: inherit !important;
+  color: inherit !important;
+}
+
+/* ==========================================================================
+   View transitions — recipes from the vercel-react-view-transitions skill.
+   Hand-rolling these gets staggered timing and morph blur wrong.
+   ========================================================================== */
+
+@keyframes vt-fade {
+  from {
+    filter: blur(3px);
+    opacity: 0;
+  }
+  to {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+@keyframes vt-slide {
+  from {
+    translate: var(--slide-offset);
+  }
+  to {
+    translate: 0;
+  }
+}
+
+@keyframes vt-slide-y {
+  from {
+    transform: translateY(var(--slide-y-offset, 10px));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes vt-via-blur {
+  30% {
+    filter: blur(3px);
+  }
+}
+
+/* Directional navigation — hierarchical moves only (list -> detail, back). */
+::view-transition-old(.nav-forward) {
+  --slide-offset: -60px;
+  animation:
+    var(--duration-exit) ease-in both vt-fade reverse,
+    var(--duration-move) ease-in-out both vt-slide reverse;
+}
+::view-transition-new(.nav-forward) {
+  --slide-offset: 60px;
+  animation:
+    var(--duration-enter) ease-out var(--duration-exit) both vt-fade,
+    var(--duration-move) ease-in-out both vt-slide;
+}
+::view-transition-old(.nav-back) {
+  --slide-offset: 60px;
+  animation:
+    var(--duration-exit) ease-in both vt-fade reverse,
+    var(--duration-move) ease-in-out both vt-slide reverse;
+}
+::view-transition-new(.nav-back) {
+  --slide-offset: -60px;
+  animation:
+    var(--duration-enter) ease-out var(--duration-exit) both vt-fade,
+    var(--duration-move) ease-in-out both vt-slide;
+}
+
+/* Suspense reveal — the skeleton yields, the content arrives. */
+::view-transition-old(.slide-down) {
+  animation:
+    var(--duration-exit) ease-out both vt-fade reverse,
+    var(--duration-exit) ease-out both vt-slide-y reverse;
+}
+::view-transition-new(.slide-up) {
+  animation:
+    var(--duration-enter) ease-in var(--duration-exit) both vt-fade,
+    var(--duration-move) ease-in both vt-slide-y;
+}
+
+/* Plain fade — lateral moves, no depth to communicate. */
+::view-transition-old(.fade-out) {
+  animation: var(--duration-exit) ease-in both vt-fade reverse;
+}
+::view-transition-new(.fade-in) {
+  animation: var(--duration-enter) ease-out var(--duration-exit) both vt-fade;
+}
+
+/* Shared element morph — the photo travelling from card to detail hero. */
+::view-transition-group(.morph) {
+  animation-duration: var(--duration-move);
+}
+::view-transition-image-pair(.morph) {
+  animation-name: vt-via-blur;
+}
+
+/* Text morph — a raster morph on resized text leaves a scaled ghost, so the
+   old snapshot is dropped and the new text drawn at full resolution. */
+::view-transition-group(.text-morph) {
+  animation-duration: var(--duration-move);
+}
+::view-transition-old(.text-morph) {
+  display: none;
+}
+::view-transition-new(.text-morph) {
+  animation: none;
+  object-fit: none;
+  object-position: left top;
+}
+
+/* The header is the fixed spatial reference: content moves, it does not. */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+/* ==========================================================================
+   Motion — one orchestrated moment, plus hover feedback
+   ========================================================================== */
+
+/* The six hero dots are the archive's label taxonomy assembling itself.
+   Finishes well under the 5s that WCAG 2.2.2 would require a control for. */
+@keyframes dot-settle {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dot-settle {
+  animation: dot-settle 520ms var(--ease) both;
+  animation-delay: calc(var(--dot-index, 0) * 90ms + 120ms);
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-rise {
+  animation: hero-rise 640ms var(--ease) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+/* Card lift. Properties are listed explicitly rather than `all`. The shadow
+   and border-color are paint properties, not compositor-only — accepted here
+   because it is a hover affordance on at most one card at a time, and it is
+   gated behind a real pointer. */
+.lift {
+  transition:
+    transform var(--duration-exit) var(--ease),
+    box-shadow var(--duration-exit) var(--ease),
+    border-color var(--duration-exit) var(--ease);
+}
+
+@media (hover: hover) {
+  .lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--elev-2);
+  }
+}
+
+/* ==========================================================================
+   Reduced motion — kills view transitions and every keyframe above
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+
+  .dot-settle,
+  .hero-rise {
+    animation: none;
+  }
+
+  .lift {
+    transition: none;
+  }
+
+  .lift:hover {
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -2,6 +2,18 @@
 // sanitized in the service layer before they leave it (FR-008).
 
 export interface PostSummary {
+  /**
+   * Blogger's author display name. Optional on a summary because it is only
+   * requested on list endpoints, where it rides along free; `Post` narrows it
+   * to required. May be "" — never render a dangling separator for it.
+   */
+  author?: string;
+  /**
+   * First image found in the post body, upsized to card width. Absent on the
+   * 15 of 35 archive posts that carry no image — every consumer must handle
+   * that, and no layout may depend on a thumbnail existing.
+   */
+  image?: string;
   id: string;
   title: string;
   slug: string;

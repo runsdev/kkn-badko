@@ -1,9 +1,11 @@
 // Site-wide constants and public (browser-safe) configuration.
 // Server-only secrets live in env.ts — never here (BR-004).
 
-export const SITE_NAME = "KKN BADKO Blog";
+// Indonesian interface per D-06. The organisation's own name, shortened the
+// way it is shortened locally: Badan Koordinasi -> Badko.
+export const SITE_NAME = "Badko TPA Moyudan";
 export const SITE_DESCRIPTION =
-  "Blog of Badan Koordinasi TPA Moyudan — content authored in Google Blogger.";
+  "Arsip Badan Koordinasi TPA Kecamatan Moyudan — 35 catatan kegiatan, foto, dan bahan mengajar dari 2009 sampai 2011.";
 
 // SRS §3.2.9 global parameter
 export const POSTS_PER_PAGE = 10;

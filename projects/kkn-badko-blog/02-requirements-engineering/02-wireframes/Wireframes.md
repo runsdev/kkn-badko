@@ -316,3 +316,33 @@ Shown only when the Blogger API fails **and** no ISR cache exists (FR-003); with
 | WF-07 | Loading/empty/error/404 | cross-cutting | FR-003/006/010/012/015, NFR-001, NFR-009 |
 
 All 8 SRS UI screens and all 20 functional requirements are covered; no wireframe introduces an element without a backing requirement (scope guard per PROJECT_PLAN §7, "scope creep").
+
+---
+
+## Addendum — WF-08, WF-09 (added 2026-07-26 under D-06)
+
+| ID | Screen | Feature | Backing |
+|----|--------|---------|---------|
+| WF-08 | Home / archive front door | FEAT-001/002 | FR-001…FR-006 **+ D-06** |
+| WF-09 | TPA directory (`/tpa`) | — | **D-06** |
+| WF-10 | Month archive (`/arsip/[year]/[month]`) | — | **D-07** |
+| WF-11 | Beranda / landing page (`/`) | — | **D-08** |
+
+**Both are specified in `06-redesign/Redesign_Plan.md` §3, not here.** They are the one place this document's scope guard is knowingly relaxed: WF-08 adds a hero band, an archive board, a statistics strip, a news section and a teaching-material band, and WF-09 adds a route — none of which has a backing FR. That relaxation was raised as decision gate **D-06** and resolved as approved on 2026-07-26.
+
+WF-08 **supersedes WF-01 for the archive front door**, which **D-08 moved from `/` to `/arsip`**. WF-01 continues to govern `/page/[n]`. Every FR-001…FR-006 obligation now lives on **`/arsip`**: the ten-card feed, all four card slots, and pagination rooted there, so page 2's "newer" link returns to `/arsip`. `POSTS_PER_PAGE` remains exactly 10.
+
+**WF-11** is the new landing page at `/`, specified in `06-redesign/D-08_Landing_Split.md`. It carries no functional requirement — it is identity-first (who this organisation is) where `/arsip` is data-first (what the archive holds). The navy hero band belongs to `/arsip`; WF-11 is deliberately light and its signature is a typographic roll call of the seventeen centres.
+
+WF-00's delegation at line 12 (colour, typography, spacing belong to Phase 2.3) is unchanged and is what authorises the rest of the redesign without a decision record.
+
+Two WF-00/WF-01 requirements that the original build did not meet are satisfied by the redesign: the whole post card is now a single link and a single tab stop (WF-00 (1)), and label chips no longer add a tab stop each.
+
+Interface language is Indonesian as of D-06, so the literal strings drawn in these frames — "Latest posts", "Go", "Newer"/"Older", "Page n of m" — are superseded by their Indonesian equivalents. The frames' layout and state behaviour are unaffected.
+
+**WF-10 (D-07)** is the native equivalent of Blogger's BlogArchive gadget, specified in `06-redesign/Gadgets_Research.md` §6 and §11. Two notes bear on this document's rules:
+
+- **No sidebar.** Blogger puts gadgets in a right rail; this site deliberately does not, because none of WF-00…WF-09 has one. The archive, label and contributor gadgets are expressed as bands and footer columns in the existing rhythm instead.
+- **The route omits `loading.tsx` on purpose**, following `/posts/[slug]`, so `notFound()` can return the real 404 status WF-07c requires rather than a soft 200. A valid month holding no posts remains a WF-07b empty state.
+
+Blogger's **Popular Posts** gadget is out of scope permanently, not deferred: no per-post view data exists in the API, and Blogger's own widget reports an empty set for this blog.

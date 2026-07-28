@@ -1,3 +1,9 @@
 .next/
 package-lock.json
 next-env.d.ts
+
+# External design source of record — a downloaded design-system analysis, not
+# our source. Reformatting it would create diff noise against the upstream file
+# and rewrite the token block the redesign is checked against.
+DESIGN.md
+*:Zone.Identifier

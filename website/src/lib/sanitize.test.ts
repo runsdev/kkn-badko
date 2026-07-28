@@ -46,3 +46,34 @@ describe("toPlainText", () => {
     expect(toPlainText("<p>Hello   <b>world</b></p>\n<p>again</p>")).toBe("Hello world again");
   });
 });
+
+describe("toPlainText entity decoding", () => {
+  // sanitize-html returns HTML, so it leaves &, <, > and " encoded. As a React
+  // text node those rendered literally — real excerpts on the site read
+  // "santri &amp; membenarkan".
+  it("decodes the ampersand that leaked into excerpts", () => {
+    expect(toPlainText("<p>santri &amp; membenarkan</p>")).toBe("santri & membenarkan");
+    expect(toPlainText("<p>santri & membenarkan</p>")).toBe("santri & membenarkan");
+  });
+
+  it("decodes angle brackets and quotes", () => {
+    expect(toPlainText("<p>a &lt;b&gt; c</p>")).toBe("a <b> c");
+    expect(toPlainText("<p>dia bilang &quot;ya&quot;</p>")).toBe('dia bilang "ya"');
+  });
+
+  it("preserves an author's literal escaped markup", () => {
+    // "&amp;lt;" is how a post writes the visible text "&lt;" — decoding the
+    // ampersand first would collapse it to "<" and change what was written
+    expect(toPlainText("<p>tulis &amp;lt;br&amp;gt;</p>")).toBe("tulis &lt;br&gt;");
+  });
+
+  it("still decodes the entities sanitize-html already handled", () => {
+    expect(toPlainText("<p>&ldquo;bagus&rdquo;</p>")).toBe("“bagus”");
+    expect(toPlainText("<p>Al-Qur&#39;an</p>")).toBe("Al-Qur'an");
+    expect(toPlainText("<p>a&nbsp;b</p>")).toBe("a b");
+  });
+
+  it("still strips tags and collapses whitespace", () => {
+    expect(toPlainText("<div><p>a</p>\n\n  <p>b</p></div>")).toBe("a b");
+  });
+});
