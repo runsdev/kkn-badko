@@ -121,17 +121,33 @@ Sequenced by what unblocks what. Hours are build effort, excluding decision time
 
 Until step 2 ships, every other phase is unobservable.
 
-### Phase 1 — Consolidate the three origins · **decision D-10** + **2–4 h**
+### Phase 1 — Consolidate what can be reached · **2 h** · *D-10 answered 2026-07-28*
 
-Decide which origin is canonical. Recommendation: **this site**.
+**The original blog is not under our control.** Sign-in to `badkotpamoyudan.blogspot.com` is blocked — the account is tied to a Yahoo address that is no longer a usable sign-in path. So the canonical-transfer plan originally written here is off the table: we cannot edit its theme, set `noindex`, redirect it, or delete it.
 
-Then, in order of value:
+That removes the best option and leaves a narrower one.
 
-- **`tpamoyudan.blogspot.com`** (the CMS): set Blogger → Settings → Crawlers and indexing → **Custom robots header tags → `noindex`**. It exists to be edited, not read. Zero risk: it has no ranking to lose.
-- **`badkotpamoyudan.blogspot.com`** (the original, holds all the equity): do **not** simply noindex it — that discards fifteen years of trust instead of transferring it. Add a per-post `<link rel="canonical">` to the corresponding page on this site, via the Blogger theme's `<head>` with conditional tags. Slugs match on both blogs, so the mapping is mechanical.
-- Keep both blogs reachable. Deleting them breaks existing inbound links.
+**Worth one attempt first — the account may not be the Yahoo address.** `badkotpamoyudan@yahoo.co.id` is the contact address *published in the blog's post content*. The Google account that actually **owns** the Blogger blog is a separate thing and is often a Gmail address created at the same time. Before writing this off, check Google Account Recovery for any plausible owner address, and ask whoever ran the blog in 2009–2011 which account they used. Recovering it is worth several hours of the rest of this plan, because it is the only route that transfers the existing ranking rather than competing with it.
 
-Risk to name: canonical consolidation can take weeks to take effect, and Google may decline the hint. It is still the correct instruction to give.
+**What we can do now:**
+
+- **`tpamoyudan.blogspot.com`** (the CMS — we own this one): Blogger → Settings → Crawlers and indexing → **Custom robots header tags → `noindex`**. It exists to be edited, not read, and has no ranking to lose. This removes one of the three duplicates outright and is the whole of Phase 1's actionable work.
+  The comment link shipped on 2026-07-27 points here; `noindex` governs indexing, not access, so it keeps working.
+- **`badkotpamoyudan.blogspot.com`**: leave it. It stays online, keeps its inbound links, and will keep ranking for the archive posts.
+
+**Strategic consequence — stop competing for the 35 archive posts.** With no canonical to give, Google will keep preferring the 2009 original for that content: it saw it first and it has fifteen years of trust. Fighting that is unwinnable and, more to the point, unnecessary — those posts serve long-tail queries about individual 2010 events, which is not the goal.
+
+Win instead on what the original blog does not have and cannot get:
+
+| | original blogspot | this site |
+|---|---|---|
+| The 17-TPA directory | — | `/tpa`, derived from the archive |
+| Organisation entity markup | — | Phase 3 |
+| Working search | — | `/search` |
+| Current activity (2023 board, FASI 2024) | — | publishable |
+| The organisation's name in the hostname | — | `badkotpamoyudan.vercel.app` |
+
+The target query is an **entity** query — *who is Badko TPA Moyudan* — not an archive query. It is won by being the best page about the organisation, and the original blog has no page about the organisation at all. Phases 3, 4 and 7 are therefore no longer "nice to have after consolidation": with consolidation off the table, **they are the strategy.**
 
 ### Phase 2 — A real domain · **decision D-11** + **1–2 h**
 
@@ -197,8 +213,9 @@ On-page work makes a site eligible to rank. For a local institutional query, wha
 
 ## 6. Decisions required
 
-**D-10 — Which origin is canonical, and what happens to the other two?**
-Recommendation: this site canonical; `tpamoyudan.blogspot.com` → `noindex`; `badkotpamoyudan.blogspot.com` → per-post `rel=canonical` to this site, kept online. Needs someone with Blogger admin on **both** blogs.
+**D-10 — Which origin is canonical, and what happens to the other two?** — **ANSWERED 2026-07-28.**
+Admin access to `badkotpamoyudan.blogspot.com` is unavailable (Yahoo sign-in no longer usable), so canonical transfer is impossible. Resolved as: `noindex` on `tpamoyudan.blogspot.com` (which we do control), leave the original online and untouched, and compete on entity rather than on the archive posts. See Phase 1.
+**Residual action:** one attempt at account recovery — the Yahoo address is the *published contact*, not necessarily the *owning Google account*. If it is recoverable, Phase 1's original plan becomes available again and is worth more than several later phases.
 
 **D-11 — Buy a domain, or stay on `badkotpamoyudan.vercel.app`?**
 Recommendation: buy `badkotpamoyudan.or.id`. Ordering matters — decide this before Phase 1, or the canonicals get aimed at a URL that then moves.
@@ -211,6 +228,8 @@ Recommendation: buy `badkotpamoyudan.or.id`. Ordering matters — decide this be
 
 Phase 0 is one hour of work and is worth more than Phases 3 through 6 put together. The site is not underperforming in search — it is instructing search engines not to index it, while serving pre-redesign English copy. Phases 1 and 2 decide whether the effort accrues to this site or keeps accruing to a blogspot address from 2009.
 
-As of 2026-07-28 Phase 0 is down to **one action: deploy.** The localhost defect is fixed in code and proven against the real broken environment, the hostname now carries the organisation's name, and the excerpt bug that was corrupting every `og:description` is fixed. All of it is sitting uncommitted. Nothing here is observable until it ships.
+As of 2026-07-28 Phase 0 is down to **one action: deploy.** The localhost defect is fixed in code and proven against the real broken environment, the hostname now carries the organisation's name, and the excerpt bug that was corrupting every `og:description` is fixed. All of it is committed (`0e6f0e4`, `8cf0f3b`, `9d82957`, `d6eeea3`) and unshipped. Nothing here is observable until it deploys.
+
+And with D-10 resolved against us, the plan's centre of gravity has moved. Consolidation was going to do the heavy lifting; it cannot. What remains is to make this the best page about the organisation — Phase 3's entity markup, Phase 4's names, and above all Phase 7's off-site corroboration and current activity. Those are no longer the tail of the plan. They are the plan.
 
 Everything from Phase 3 onward is genuine, competent SEO work that will help — but only once the site is a real, indexable, single-origin destination. Sequence matters here more than volume.
