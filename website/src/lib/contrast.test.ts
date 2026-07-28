@@ -146,6 +146,13 @@ describe("primary and dark surfaces", () => {
     expect(contrast("var(--brown)", "var(--tint-yellow-bold)")).toBeGreaterThanOrEqual(AA_NORMAL);
   });
 
+  it("the comment CTA clears AA — link-pressed on tint-sky", () => {
+    // CommentInvite's button. Plain --link is the tempting choice and is not
+    // safe on a tint, the same trap already documented for surface-soft above.
+    expect(contrast("var(--link-pressed)", "var(--tint-sky)")).toBeGreaterThanOrEqual(AA_NORMAL);
+    expect(contrast("var(--link)", "var(--tint-sky)")).toBeLessThan(AA_NORMAL);
+  });
+
   it("rejects DESIGN.md's badge-tag-green, which is why teal-deep was derived", () => {
     // brand-green #1aae39 on mint is 2.50:1 — the documented deviation
     expect(contrast("#1aae39", "var(--tint-mint)")).toBeLessThan(AA_NORMAL);

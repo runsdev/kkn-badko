@@ -150,7 +150,12 @@ These are deliberately low-fidelity: they fix **layout, content slots, navigatio
 | |  Author name  ·  14 Jul 2026                                     | |
 | |  ~~~~ ... ~~~~                                                   | |
 | +------------------------------------------------------------------+ |
-| (5) Comments are managed in Blogger.                                 |
+| (5) +--------------------------------------------------------------+ |
+|     | Have a story or correction about this note? Write it on      | |
+|     | Blogger — it will appear here too, a little later.           | |
+|     |   [ (pencil) Write a comment on Blogger  ↗ ]                  | |
+|     | Blogger may ask you to sign in. Comments are managed there.   | |
+|     +--------------------------------------------------------------+ |
 |                                                                      |
 | (6) [<- Back to all posts]                                           |
 +----------------------------------------------------------------------+
@@ -159,8 +164,10 @@ These are deliberately low-fidelity: they fix **layout, content slots, navigatio
 1. One `h1` per page; feeds `<title>`, meta description, Open Graph, and JSON-LD `BlogPosting` (FR-009, NFR-015).
 2. Metadata row: date, author display name, all label chips (each → WF-03).
 3. Post body rendered **only after sanitization** (FR-008, P-2). Images lazy-loaded.
-4. Native Blogger comments, read-only (FR-016); zero comments → "No comments yet." quiet state; comment fetch failure → hide the block entirely (SRS §3.2.6).
-5. Static caption — there is deliberately **no comment form** (FR-017).
+4. Native Blogger comments, read-only (FR-016); zero comments → "No comments yet." quiet state; comment fetch failure → **drop the count and the list**, keeping the heading and (5). Amends SRS §3.2.6's "hide the block entirely": the rule existed so the page never asserts a comment state it could not read, and dropping the count and list preserves exactly that. (5) needs no API call, so a failed fetch is no reason to withhold it.
+5. Link to Blogger's own comment editor, at the post's `#comment-form` anchor — the URL Blogger itself advertises as the post's `rel="replies"` link. Opens in a new tab; the destination is announced for screen readers.
+   Still **no comment form on this origin** (FR-017): nothing is typed here, nothing is posted from here, no reader data is collected. This is navigation, not a submission control, so BR-008 (comments live and are moderated in Blogger) and NFR-012 (no personal data) also continue to hold.
+   It is a link rather than an on-site form because **no API can create a comment**: v3 has no `comments.insert`, and the legacy GData v2 comment feed silently discards writes — probed 2026-07-27, see `06-redesign/New_Posts_And_Comments.md`.
 6. Back link to `/`.
 
 **States:** unknown slug → HTTP 404, WF-07c (FR-010).

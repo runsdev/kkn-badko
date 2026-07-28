@@ -3,11 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
+import CommentInvite from "@/components/CommentInvite";
 import ErrorState from "@/components/ErrorState";
 import LabelChip from "@/components/LabelChip";
 import Shell from "@/components/Shell";
 import Transition from "@/components/Transition";
 import { getPostBySlug, getPostComments } from "@/lib/blogger";
+import { bloggerCommentUrl } from "@/lib/comments";
 import { formatDate } from "@/lib/format";
 import { HERO_WIDTH, resizeBloggerImage, stripFirstImage } from "@/lib/image";
 import { labelStyle, primaryLabel } from "@/lib/labels";
@@ -57,7 +59,8 @@ export default async function PostPage({ params }: Props) {
   }
   if (!post) notFound(); // FR-010: unknown slug is a real 404
 
-  const comments = await getPostComments(post.id); // null → hide block (§3.2.6)
+  const comments = await getPostComments(post.id); // null → no count, no list (§3.2.6)
+  const commentHref = bloggerCommentUrl(post.url); // null → link is withheld
 
   const label = primaryLabel(post.labels);
   const style = label ? labelStyle(label) : undefined;
@@ -146,15 +149,24 @@ export default async function PostPage({ params }: Props) {
             dangerouslySetInnerHTML={{ __html: bodyHtml }}
           />
 
-          {comments !== null && (
-            <section
-              className="mt-16 border-t border-hairline pt-8"
-              aria-labelledby="comments-heading"
-            >
-              <h2 id="comments-heading" className="text-xl font-semibold text-ink">
-                Komentar <span className="tabular font-normal text-slate">{comments.length}</span>
-              </h2>
-              {comments.length === 0 ? (
+          {/* The section renders even when the comment fetch failed. §3.2.6's
+              rule was "hide the block" so the page never asserts something it
+              could not read — that intent is kept by dropping the count and the
+              list on null. The invitation below needs no API call, so a failed
+              fetch is no reason to withhold it. */}
+          <section
+            className="mt-16 border-t border-hairline pt-8"
+            aria-labelledby="comments-heading"
+          >
+            <h2 id="comments-heading" className="text-xl font-semibold text-ink">
+              Komentar{" "}
+              {comments !== null && (
+                <span className="tabular font-normal text-slate">{comments.length}</span>
+              )}
+            </h2>
+
+            {comments !== null &&
+              (comments.length === 0 ? (
                 <p className="mt-3 text-sm text-slate">Belum ada komentar.</p>
               ) : (
                 <ul className="mt-5 space-y-4">
@@ -179,11 +191,16 @@ export default async function PostPage({ params }: Props) {
                     </li>
                   ))}
                 </ul>
-              )}
-              {/* WF-02 (5): deliberately no comment form (FR-017) */}
+              ))}
+
+            {/* WF-02 (5): still no comment form on this origin (FR-017) — the
+                reader is sent to Blogger's own editor instead. */}
+            {commentHref ? (
+              <CommentInvite href={commentHref} />
+            ) : (
               <p className="mt-5 text-[13px] text-slate">Komentar dikelola di Blogger.</p>
-            </section>
-          )}
+            )}
+          </section>
 
           <p className="mt-16">
             <Link

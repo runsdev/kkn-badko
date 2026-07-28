@@ -25,6 +25,12 @@ export interface PostSummary {
 export interface Post extends PostSummary {
   author: string;
   contentHtml: string; // sanitized
+  /**
+   * The post's canonical Blogger URL. Kept on the detail view because Blogger's
+   * comment editor is the only surface that can accept a new comment, and it
+   * lives at this address — see lib/comments.ts.
+   */
+  url: string;
 }
 
 export interface PostComment {

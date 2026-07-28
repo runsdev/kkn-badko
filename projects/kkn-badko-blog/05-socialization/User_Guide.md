@@ -72,7 +72,16 @@ The website's own wording is **Indonesian** — the menu reads *Beranda, Arsip, 
 
 ## Comments
 
-Comments are written and moderated **in Blogger** (Blogger → Comments). The website shows them read-only under each post; there is deliberately no comment form or contact form on the website — the Contact page is just an email link.
+Comments are written and moderated **in Blogger** (Blogger → Comments). The website shows them read-only under each post.
+
+Under the comments on every post there is a **"Tulis komentar di Blogger"** button. It opens that post on Blogger, in a new tab, scrolled to Blogger's own comment box. The reader writes there; the comment appears on the website within about 10 minutes. Blogger may ask them to sign in with a Google account first.
+
+The website itself still has no comment form and no contact form — the button is a link, and nothing a reader types ever reaches this site. The Contact page is just an email link.
+
+**Two settings worth checking in Blogger,** since they decide whether that button leads anywhere useful:
+
+- **Settings → Comments → Who can comment.** If this is "Only members of this blog", readers who follow the link cannot post. "Anyone" or "User with Google Accounts" is what makes the button work.
+- **Settings → Comments → Comment moderation.** On a public archive with no daily caretaker, unmoderated comments are a spam surface — but moderated ones need somebody to check them. Pick one deliberately and note who is responsible in the Runbook.
 
 ## If something looks wrong on the website
 

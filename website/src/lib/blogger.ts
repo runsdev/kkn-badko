@@ -87,6 +87,9 @@ function toPost(raw: RawPost): Post {
     ...toSummary(raw),
     author: raw.author?.displayName ?? "",
     contentHtml: sanitize(raw.content ?? ""),
+    // POST_FIELDS already asks for `url` (the slug is derived from it), so the
+    // comment-editor link costs no extra request either.
+    url: raw.url,
   };
 }
 
@@ -243,7 +246,12 @@ export async function searchPosts(q: string): Promise<PostSummary[]> {
 }
 
 // FR-016 — read-only native Blogger comments. Returns null on failure so the
-// UI hides the block entirely (SRS §3.2.6) instead of erroring the page.
+// UI drops the count and the list (SRS §3.2.6) instead of erroring the page.
+//
+// Read-only is not a preference, it is the whole API surface: there is no
+// `comments.insert` in v3 and the legacy GData v2 feed silently discards
+// writes. lib/comments.ts carries the probe results and links readers to
+// Blogger's editor, which is the only thing that can still accept a comment.
 export async function getPostComments(postId: string): Promise<PostComment[] | null> {
   try {
     const data = await bloggerFetch<{
