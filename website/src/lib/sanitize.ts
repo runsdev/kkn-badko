@@ -57,8 +57,36 @@ const PLAIN_TEXT_ENTITIES: [RegExp, string][] = [
   [/&amp;/g, "&"],
 ];
 
+/**
+ * Block-level elements, which must become whitespace rather than vanish.
+ *
+ * Stripping tags with nothing in their place runs adjacent blocks together.
+ * Blogger's editor emits blocks with no whitespace between them, so there is
+ * nothing else left to separate them: a real post body of
+ * `<h1>&nbsp;TES 123</h1><h3>Subjudul 1</h3><div>Lorem ipsum</div>` produced
+ * the excerpt "TES 123Subjudul 1Lorem ipsum" on the home page.
+ *
+ * Inline elements are deliberately absent from this list. A browser renders
+ * `<b>foo</b>bar` as "foobar", and the plain text has to match what the reader
+ * saw — inserting a space there would invent one the page does not have.
+ */
+const BLOCK_ELEMENTS =
+  "address|article|aside|blockquote|br|dd|details|div|dl|dt|fieldset|figcaption|" +
+  "figure|footer|form|h[1-6]|header|hgroup|hr|li|main|nav|ol|p|pre|section|" +
+  "summary|table|tbody|td|tfoot|th|thead|tr|ul";
+
+const BLOCK_BOUNDARY = new RegExp(`</?(?:${BLOCK_ELEMENTS})\\b[^>]*>`, "gi");
+
 export function toPlainText(html: string): string {
-  let text = sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} });
+  // Blocks are separated BEFORE tags are stripped — afterwards the boundary is
+  // gone and the join is unrecoverable. This only deletes markup and inserts a
+  // space, so it cannot compose a new tag, and sanitize-html is still what
+  // actually strips. It runs before entity decoding too, so an author's
+  // escaped `&lt;p&gt;` stays literal text rather than being read as a tag.
+  let text = sanitizeHtml(html.replace(BLOCK_BOUNDARY, " "), {
+    allowedTags: [],
+    allowedAttributes: {},
+  });
   for (const [pattern, char] of PLAIN_TEXT_ENTITIES) text = text.replace(pattern, char);
   return text.replace(/\s+/g, " ").trim();
 }

@@ -47,6 +47,48 @@ describe("toPlainText", () => {
   });
 });
 
+// Blogger's editor writes blocks back to back with no whitespace between them.
+// Stripping the tags with nothing in their place ran the words together, and
+// the excerpt is what the home page, the cards, and every meta description
+// show — so this was visible on the site and in search results.
+describe("toPlainText block boundaries", () => {
+  it("separates blocks that Blogger emits with no whitespace between them", () => {
+    // verbatim body of the 27 Jul 2026 post, which rendered as
+    // "TES 123Subjudul 1Lorem ipsum" on the home page
+    const body =
+      '<h1 style="text-align: left;">&nbsp;TES 123</h1>' +
+      '<h3 style="text-align: left;">Subjudul 1</h3>' +
+      "<div>Lorem ipsum</div>";
+    expect(toPlainText(body)).toBe("TES 123 Subjudul 1 Lorem ipsum");
+  });
+
+  it("separates list items, table cells, and line breaks", () => {
+    expect(toPlainText("<ul><li>satu</li><li>dua</li></ul>")).toBe("satu dua");
+    expect(toPlainText("<table><tr><td>a</td><td>b</td></tr></table>")).toBe("a b");
+    expect(toPlainText("baris satu<br>baris dua")).toBe("baris satu baris dua");
+    expect(toPlainText("<p>a</p><blockquote>b</blockquote>")).toBe("a b");
+  });
+
+  it("does NOT separate inline elements — a browser renders them joined", () => {
+    // <b>foo</b>bar reads as "foobar" on the page; the plain text must agree
+    expect(toPlainText("<p><b>foo</b>bar</p>")).toBe("foobar");
+    expect(toPlainText("<p>Al-<em>Qur'an</em></p>")).toBe("Al-Qur'an");
+    expect(toPlainText('<p>lihat <a href="https://x.test">di sini</a>ya</p>')).toBe(
+      "lihat di siniya",
+    );
+  });
+
+  it("inserts exactly one space, never a run", () => {
+    expect(toPlainText("<div>\n  <p>a</p>\n  <p>b</p>\n</div>")).toBe("a b");
+  });
+
+  it("still refuses to treat an author's escaped markup as a tag", () => {
+    // the boundary pass runs on raw HTML, where this is still "&lt;p&gt;"
+    expect(toPlainText("<p>tulis &amp;lt;p&amp;gt;</p>")).toBe("tulis &lt;p&gt;");
+    expect(toPlainText("<p>a &lt;div&gt; b</p>")).toBe("a <div> b");
+  });
+});
+
 describe("toPlainText entity decoding", () => {
   // sanitize-html returns HTML, so it leaves &, <, > and " encoded. As a React
   // text node those rendered literally — real excerpts on the site read
